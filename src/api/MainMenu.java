@@ -1,28 +1,25 @@
 package api;
 
-import model.Customer;
+
 import model.IRoom;
-import model.Reservation;
-import model.Room;
 import service.CustomerService;
 import service.ReservationService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+
 
 public class MainMenu {
-   private static Scanner scanner = new Scanner(System.in);
+   private static final Scanner scanner = new Scanner(System.in);
    boolean keepRunning = true;
    static CustomerService customerService = CustomerService.getInstance();
    static ReservationService reservationService = ReservationService.getInstance();
    static AdminResource adminResource = AdminResource.getInstance();
    static HotelResource hotelResource = HotelResource.getInstance();
 
-   public MainMenu() throws ParseException {
-   }
+//   public MainMenu() throws ParseException {
+//   }
 
    public void startMainActions () {
 
@@ -107,8 +104,6 @@ public class MainMenu {
                        //getting the parameters need it for reserving a room...
                        IRoom iRoom =  hotelResource.getRoom(roomNumber);
                        //Reserving a room...
-
-
                        hotelResource.bookARoom(emailAnswer,iRoom,getCheckInDate(),getCheckOutDate());
                        keepRunning = false;
                     } else {
@@ -170,15 +165,8 @@ public class MainMenu {
                  System.out.println("Enter CheckOut Date mm/dd/yyyy example 03/20/2009");
                  String userCheckOutDate = scanner.nextLine();
                  Date checkOutDate = simpleDateFormat.parse(userCheckOutDate);
-                 String userDate = simpleDateFormat.format(checkOutDate);
-//                 Date getCheckInDate = adminResource.reservationService.getCheckIn();
-//                 String getCheckIn = simpleDateFormat.format(getCheckInDate);
-                 //if(userDate.compareTo(getCheckIn) > 0 && userDate.compareTo(getCheckIn) != 0) {
                     keepRunning = false;
                     return checkOutDate;
-//                 } else {
-//                    System.out.println("The checkOut date cannot be less or equals than checkIn date.");
-//                 }
 
               } catch (ParseException ex) {
                  System.out.println("CheckOut Date is not acceptable.");
@@ -196,23 +184,3 @@ public class MainMenu {
 
 
 }
-
-//           if (todayDate.compareTo(checkInDate) < 0) {
-//              keepRunning = false;
-//              return checkInDate;
-//           } else if (todayDate.compareTo(checkInDate) == 0){
-//              keepRunning = false;
-//              return checkInDate;
-//           } else {
-//              System.out.println("The checkIn date cannot be less than today's date.");
-////              keepRunning = true;
-//           }
-
-//           if (calendar1.get(Calendar.MONTH) >= calendar2.get(Calendar.MONTH)
-//                   && calendar1.get(Calendar.DAY_OF_MONTH) >= calendar2.get(Calendar.DAY_OF_MONTH)
-//                   && calendar1.get(Calendar.YEAR) >= calendar2.get(Calendar.YEAR)
-//                   || calendar1.get(Calendar.MONTH) <= calendar2.get(Calendar.MONTH)
-//                   && calendar1.get(Calendar.DAY_OF_MONTH) <= calendar2.get(Calendar.DAY_OF_MONTH)
-//                   && calendar1.get(Calendar.YEAR) < calendar2.get(Calendar.YEAR)) {
-//                   keepRunning = false;
-//                   return checkInDate;

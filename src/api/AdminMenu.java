@@ -3,8 +3,6 @@ package api;
 import model.IRoom;
 import model.Room;
 import model.RoomType;
-import service.CustomerService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,8 +10,8 @@ import java.util.Scanner;
 public class AdminMenu {
     Scanner scanner = new Scanner(System.in);
     boolean keepRunning = true;
-    private static AdminResource adminResource = AdminResource.getInstance();
-    CustomerService customerService = CustomerService.getInstance();
+    private static final AdminResource adminResource = AdminResource.getInstance();
+
 
     public void startAdminActions () {
 
@@ -69,7 +67,7 @@ public class AdminMenu {
          String roomNumber = scanner.nextLine();
          if(adminResource.getAllRooms().contains(roomNumber)) {
              System.out.println("Room number already selected. Please, select another number for the room.");
-             addRoom(); //OJO RECURRING...
+             addRoom();
          } else {
              System.out.println("Enter room price per night: ");
              Double roomPrice = Double.parseDouble(scanner.nextLine());
