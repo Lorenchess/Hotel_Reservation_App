@@ -65,7 +65,7 @@ public class AdminMenu {
      public void addRoom () {
          System.out.println("Enter room number: ");
          String roomNumber = scanner.nextLine();
-         if(adminResource.getAllRooms().contains(roomNumber)) {
+         if(adminResource.reservationService.gotRoomNumber(roomNumber)) {
              System.out.println("Room number already selected. Please, select another number for the room.");
              addRoom();
          } else {

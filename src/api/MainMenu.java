@@ -98,7 +98,7 @@ public class MainMenu {
               if(customerService.getCustomer(emailAnswer) != null) {
                  boolean keepRunning = true;
                  while (keepRunning) {
-                    System.out.println("What room would you like to reserve? Enter the room number: " + reservationService.getAllRooms());
+                    System.out.println("Enter the room number: " + reservationService.getAllRooms());
                     String roomNumber = scanner.nextLine();
                     if(adminResource.reservationService.gotRoomNumber(roomNumber)) {
                        //getting the parameters need it for reserving a room...

@@ -3,9 +3,9 @@ package model;
 import java.util.Objects;
 
 public class Room implements IRoom{
-    private String roomNumber;
-    private Double price;
-    private RoomType enumeration;
+    private final String roomNumber;
+    private final Double price;
+    private final RoomType enumeration;
 
     public Room(String roomNumber, Double price, RoomType enumeration) {
         this.roomNumber = roomNumber;
@@ -48,6 +48,6 @@ public class Room implements IRoom{
 
     @Override
     public String toString() {
-        return "Room Number: " + roomNumber + " Type: " + enumeration + " Price: " + price;
+        return "Room Number: " + roomNumber + " Type: " + enumeration + " Price: $" + price;
     }
 }
