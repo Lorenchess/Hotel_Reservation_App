@@ -5,15 +5,13 @@ import model.IRoom;
 import model.Reservation;
 import model.Room;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 public class ReservationService {
     CustomerService customerService = CustomerService.getInstance();
-    Collection<Reservation> ourReservations = new LinkedHashSet<>();
-    Collection<IRoom> ourRooms = new HashSet<>();
+    Set<Reservation> ourReservations = new HashSet<>();
+    Set<IRoom> ourRooms = new HashSet<>();
+    //Reservation reservation;
 
     // singleton design pattern
     private static volatile ReservationService reservationService;
@@ -31,14 +29,14 @@ public class ReservationService {
     }
 
 
-    //adding only one room in the collection that will contain all the rooms in the application
     public void addRoom (IRoom room) {
         ourRooms.add(room);
+        System.out.println("Room add it successfully!");
     }
 
     public IRoom getARoom (String roomId) {
         for (IRoom room : ourRooms) {
-            if(room.isFree() && room.getRoomNumber().equals(roomId)) {
+            if(room.getRoomNumber().equals(roomId)) {
                 return room;
             }
         }
@@ -51,18 +49,35 @@ public class ReservationService {
         return ourRooms;
     }
 
+    public boolean isWithingRange (Reservation reservation, Date checkIn, Date checkOut) {
+        return (checkIn.before(reservation.getCheckOutDate()) || checkOut.after(reservation.getCheckInDate()));
+    }
+
     public Reservation reserveARoom (Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
-        Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
-        System.out.println("The " + room + " has been reserved.");
+       Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
 
-        ourReservations.add(reservation);
-
+       if (ourReservations.isEmpty() && (isWithingRange(reservation,checkInDate,checkOutDate))) {
+           ourReservations.add(reservation);
+           System.out.println("Room reserved successfully");
+       } else {
+           System.out.println("Room already reserved");
+       }
         return reservation;
+
+//       if (ourReservations.isEmpty()){
+//           ourReservations.add(reservation);
+//           System.out.println("Room reserved successfully");
+//       } else if(isWithingRange(reservation,checkInDate,checkOutDate)) {
+//           System.out.println("Room already reserved");
+//       } else {
+//           ourReservations.add(reservation);
+//           System.out.println("Room reserved successfully");
+//       }
+//            return reservation;
     }
 
     public Collection<Reservation> getCustomersReservation (Customer customer) {
         if (ourReservations.contains(customer)) {
-            //customer reservation
             for (Reservation reservation : ourReservations) {
                 System.out.println(reservation);
             }
@@ -72,7 +87,26 @@ public class ReservationService {
 
     public void printAllReservation () {
         for (Reservation reservations : ourReservations) {
-            System.out.println(reservations);
+           //System.out.println(reservations);
         }
     }
+
+    public Set<Reservation> getAllReservations() {
+        for (Reservation reservation : ourReservations) {
+            System.out.println(reservation);
+        }
+        return ourReservations;
+    }
+
+    public boolean gotRoomNumber (String roomNumber) {
+        for (IRoom room : ourRooms){
+           if (room.getRoomNumber().equals(roomNumber)) {
+               return true;
+           }
+        }
+        return false;
+    }
+//    public Date getCheckIn() {
+//        return reservation.getCheckInDate();
+//    }
 }

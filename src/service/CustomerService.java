@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class CustomerService {
 
-    Collection<Customer> ourCustomers = new LinkedHashSet<>();
+    Set<Customer> ourCustomers = new LinkedHashSet<>();
     // singleton design pattern
     private static volatile CustomerService customerService;
 
@@ -55,7 +55,7 @@ public class CustomerService {
         return null;
     }
 
-    public Collection<Customer> getAllCustomers () {
+    public Collection<Customer> getCustomers () {
         for (Customer customer : ourCustomers) {
             System.out.println(customer);
         }
