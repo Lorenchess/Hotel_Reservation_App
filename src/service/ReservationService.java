@@ -50,8 +50,12 @@ public class ReservationService {
     }
 
     public boolean isWithingRange (Reservation reservation, Date checkIn, Date checkOut) {
-        return (checkIn.before(reservation.getCheckOutDate()) || checkOut.after(reservation.getCheckInDate()));
+        return (checkIn.before(reservation.getCheckOutDate()) && checkOut.after(reservation.getCheckInDate()));
     }
+//    public double findDifference (Date checkIn, Date checkOut) {
+//        double difference = checkOut.getTime() - checkIn.getTime();
+//        return difference;
+//    }
 
     public Reservation reserveARoom (Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
        Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
@@ -59,8 +63,17 @@ public class ReservationService {
        if (ourReservations.isEmpty() && (isWithingRange(reservation,checkInDate,checkOutDate))) {
            ourReservations.add(reservation);
            System.out.println("Room reserved successfully");
+       } else if (!isWithingRange(reservation,checkInDate,checkOutDate)) {
+           System.out.println("No valid date to check-in our check out");
        } else {
-           System.out.println("Room already reserved");
+           for (Reservation res :ourReservations){
+               if(reservation.getCheckInDate().equals(res.getCheckInDate()) || reservation.getCheckOutDate().equals(res.getCheckOutDate()) ) {
+                   System.out.println("Room already reserved");
+               } else {
+                   ourReservations.add(reservation);
+                   System.out.println("Room reserved successfullyy");
+               }
+           }
        }
         return reservation;
 
