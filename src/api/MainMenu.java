@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
+
 public class MainMenu {
    private static final Scanner scanner = new Scanner(System.in);
    boolean keepRunning = true;
@@ -18,13 +19,12 @@ public class MainMenu {
    static AdminResource adminResource = AdminResource.getInstance();
    static HotelResource hotelResource = HotelResource.getInstance();
 
-//   public MainMenu() throws ParseException {
-//   }
+
 
    public void startMainActions () {
 
      System.out.println("Welcome to the Hotel Reservation Application");
-     System.out.println();
+     //System.out.println();
      try  {
         while (keepRunning) {
            try {
@@ -34,7 +34,9 @@ public class MainMenu {
               if (selection == 1) {
                  reserveARoom();
               } else if (selection == 2) {
-                 seeReservations();
+                  System.out.println("Please type your email: ");
+                  String customerEmail = scanner.nextLine();
+                  seeMyReservations(customerEmail);
               } else if (selection == 3) {
                  createCustomer();
               } else if (selection == 4) {
@@ -48,12 +50,14 @@ public class MainMenu {
               }
 
            } catch (Exception ex) {
-              System.out.println("\n Invalid input. The valid selections are from 1 to 5. Please try again.\n");
+               System.out.println(ex);
            }
         }
+     } catch (Exception ex) {
+         System.out.println("\n Invalid input. The valid selections are from 1 to 5. Please try again.\n");
      } finally {
-        scanner.close();
-     }
+           scanner.close();
+       }
   }
 
   public void mainMenuOptions () {
@@ -68,13 +72,20 @@ public class MainMenu {
   }
 
   public void createCustomer () {
-     System.out.println("Enter Email: format name@domain.com");
-     String customerEmail = scanner.nextLine();
-     System.out.println("Enter First Name: ");
-     String customerFirstName = scanner.nextLine();
-     System.out.println("Enter Last Name: ");
-     String customerLastName = scanner.nextLine();
-     hotelResource.createACustomer(customerEmail,customerFirstName,customerLastName);
+
+       try {
+           System.out.println("Enter Email: format name@domain.com");
+           String customerEmail = scanner.nextLine();
+
+           System.out.println("Enter First Name: ");
+           String customerFirstName = scanner.nextLine();
+           System.out.println("Enter Last Name: ");
+           String customerLastName = scanner.nextLine();
+           hotelResource.createACustomer(customerEmail,customerFirstName,customerLastName);
+       } catch (Exception ex) {
+           System.out.println(ex);
+       }
+
   }
 
   private void reserveARoom () throws ParseException {
@@ -122,6 +133,7 @@ public class MainMenu {
 
         } else {
            System.out.println("Please enter: yes or no");
+           reserveARoom();
         }
      }
 
@@ -139,14 +151,23 @@ public class MainMenu {
            Date checkInDate = simpleDateFormat.parse(userCheckInDate);
            String userDate = simpleDateFormat.format(checkInDate);
            Date todayDate = new Date();
-           String today = simpleDateFormat.format(todayDate);
+           //pass Date to string and pass Date
+            String today = simpleDateFormat.format(todayDate);
+            //Date today = simpleDateFormat.parse(date);
+            if(checkInDate.compareTo(todayDate) >= 0) {
+                keepRunning = false;
+                return checkInDate;
+            } else {
+                System.out.println("The checkIn date cannot be less than today's date.");
+            }
+//            if (reservationService.isWithingRange(today,checkInDate)) {
+//                keepRunning = false;
+//                return checkInDate;
+//            } else {
+//                System.out.println("The checkIn date cannot be less than today's date.");
+//            }
 
-           if(userDate.compareTo(today) >= 0) {
-              keepRunning = false;
-              return checkInDate;
-           } else {
-              System.out.println("The checkIn date cannot be less than today's date.");
-           }
+
 
         } catch (ParseException ex) {
            System.out.println("CheckIn Date is not acceptable.");
@@ -175,12 +196,13 @@ public class MainMenu {
            return null;
         }
 
-        private void seeReservations () {
-           if(adminResource.reservationService.getAllReservations().isEmpty()) {
-              System.out.println("There are no reservations at this moment.");
+        private void seeMyReservations (String customerEmail) {
+           if(hotelResource.getCustomersReservation().isEmpty()) {
+               System.out.println("You have no reservation made.");
            }
-           adminResource.displayAllReservations();
+            hotelResource.getCustomersReservation(customerEmail);
         }
+
 
 
 }

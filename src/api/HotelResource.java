@@ -8,6 +8,7 @@ import model.Reservation;
 import service.CustomerService;
 import service.ReservationService;
 
+import java.text.CollationElementIterator;
 import java.util.Collection;
 import java.util.Date;
 
@@ -48,9 +49,14 @@ public class HotelResource {
                 checkOutDate);
     }
 
-    public Collection<Reservation> getCustomerReservation (String customerEmail) {
+    public Collection<Reservation> getCustomersReservation (String customerEmail) {
        return reservationService.getCustomersReservation(getCustomer(customerEmail));
     }
+
+    public Collection<Reservation> getCustomersReservation () { //this is for all customers' admin business
+        return reservationService.getAllReservations();
+    }
+
 
     public Collection<IRoom> findARoom (Date checkIn, Date checkOut) {
        //find IRoom collection

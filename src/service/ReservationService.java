@@ -3,8 +3,11 @@ package service;
 import model.Customer;
 import model.IRoom;
 import model.Reservation;
+import org.jetbrains.annotations.NotNull;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ReservationService {
@@ -50,40 +53,56 @@ public class ReservationService {
     public boolean isWithingRange (Reservation reservation, Date checkIn, Date checkOut) {
         return (checkIn.before(reservation.getCheckOutDate()) && checkOut.after(reservation.getCheckInDate()));
     }
+//    public boolean isWithingRange (String todayDate, Date checkIn) throws ParseException {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+//        Date today = simpleDateFormat.parse(todayDate);
+//        return today.before(checkIn) || today.equals(checkIn);
+//    }
+
 
     public Reservation reserveARoom (Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
-       Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
+            Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
+        try{
+            if (ourReservations.isEmpty() && (isWithingRange(reservation,checkInDate,checkOutDate))) {
+                ourReservations.add(reservation);
+                System.out.println("Room reserved successfully");
+            } else if (!isWithingRange(reservation,checkInDate,checkOutDate)) {
+                System.out.println("No valid date to check-in our check out");
+            } else {
+                for (Reservation res :ourReservations){
 
-       if (ourReservations.isEmpty() && (isWithingRange(reservation,checkInDate,checkOutDate))) {
-           ourReservations.add(reservation);
-           System.out.println("Room reserved successfully");
-       } else if (!isWithingRange(reservation,checkInDate,checkOutDate)) {
-           System.out.println("No valid date to check-in our check out");
-       } else {
-           for (Reservation res :ourReservations){
+                    if((reservation.getCheckInDate().before(res.getCheckOutDate())
+                            || reservation.getCheckOutDate().after(res.getCheckInDate())
+                    )) {
+                        System.out.println("Room already reserved");
+                    } else {
+                        ourReservations.add(reservation);
+                        System.out.println("Room successfully reserved.");
+                    }
+                }
+            }
 
-               if( reservation.getCheckInDate().after(res.getCheckInDate())
-                       || reservation.getCheckOutDate().before(res.getCheckOutDate())
-                       || reservation.getCheckInDate().equals(res.getCheckInDate())
-                       || reservation.getCheckOutDate().equals(res.getCheckOutDate())) {
-                   System.out.println("Room already reserved");
-               } else {
-                   ourReservations.add(reservation);
-                   System.out.println("Room reserved successfully");
-               }
-           }
-       }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
         return reservation;
 
     }
 
     public Collection<Reservation> getCustomersReservation (Customer customer) {
-        if (ourReservations.contains(customer)) {
-            for (Reservation reservation : ourReservations) {
-                System.out.println(reservation);
-            }
-        }
-        return null;
+         try{
+             for (Reservation reservation : ourReservations) {
+                 if (ourReservations.contains(customer.getEmail())) {
+                     System.out.println(reservation);
+                 } else {
+                     System.out.println("You have no reservations made.");
+                 }
+             }
+
+         } catch (Exception ex) {
+             System.out.println("You have no reservations made.");
+         }
+        return ourReservations;
     }
 
     public void printAllReservation () {

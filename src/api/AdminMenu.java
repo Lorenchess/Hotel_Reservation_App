@@ -11,6 +11,7 @@ public class AdminMenu {
     Scanner scanner = new Scanner(System.in);
     boolean keepRunning = true;
     private static final AdminResource adminResource = AdminResource.getInstance();
+    private static final HotelResource hotelResource = HotelResource.getInstance();
 
 
     public void startAdminActions () {
@@ -109,7 +110,7 @@ public class AdminMenu {
      }
 
      private void printAllReservations () {
-        if (adminResource.reservationService.getAllReservations().isEmpty()) {
+        if (hotelResource.getCustomersReservation().isEmpty()) {
             System.out.println("There are no reservations made yet.");
         }
      }

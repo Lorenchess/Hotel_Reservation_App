@@ -44,7 +44,7 @@ public class AdminResource {
     }
 
     public Collection<Customer> getAllCustomers () {
-        return customerService.getCustomers();
+        return customerService.getAllCustomers();
     }
 
     public void displayAllReservations () {

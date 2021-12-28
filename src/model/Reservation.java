@@ -48,11 +48,11 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" +
+        return "Reservations [" +
                 "" + customer +
                 "" + room +
-                ", checkInDate=" + checkInDate +
-                ", checkOutDate=" + checkOutDate +
-                '}';
+                ", Check-In =" + checkInDate +
+                ", Check-Out =" + checkOutDate +
+                ']';
     }
 }

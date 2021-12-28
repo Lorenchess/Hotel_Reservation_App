@@ -55,7 +55,7 @@ public class CustomerService {
         return null;
     }
 
-    public Collection<Customer> getCustomers () {
+    public Collection<Customer> getAllCustomers () {
         for (Customer customer : ourCustomers) {
             System.out.println(customer);
         }
